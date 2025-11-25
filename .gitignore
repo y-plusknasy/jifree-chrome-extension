@@ -1,0 +1,28 @@
+# OS & Editor
+.DS_Store
+.vscode/
+!.vscode/settings.json
+*.swp
+*~
+
+# Go (Backend)
+/backend/bin/
+/backend/vendor/
+# Note: go.sum is committed to ensure reproducible builds
+
+# Node.js / Web (Extension)
+node_modules/
+/extension/dist/
+/extension/build/
+.npmrc
+
+# Environment Variables & Secrets
+.env
+.env.*
+*.pem
+
+# Docker
+docker-compose.override.yml
+
+# Google Cloud
+.gcloudignore

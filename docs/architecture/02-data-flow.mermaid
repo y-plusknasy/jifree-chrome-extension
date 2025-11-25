@@ -1,0 +1,23 @@
+sequenceDiagram
+    participant User as ユーザー (子供を想定)
+    participant Ext as Chrome Extension
+    participant GCF as Cloud Functions (Go)
+    participant Morph as 形態素分析器
+
+    User->>Ext: テキストをドラッグ (ハイライト)
+    Ext->>Ext: 対象のHTML要素を抽出
+    Ext->>Ext: 認証情報取得 (Secret, UserID)
+    Ext->>GCF: POST /analyze { html, selection, auth }
+    
+    GCF->>GCF: CORSヘッダー検証 (Origin)
+    GCF->>GCF: 共通鍵検証
+    GCF->>GCF: Check Rate Limit (In-Memory)
+    
+    alt Limit Exceeded
+        GCF-->>Ext: 429 Too Many Requests
+    else Allowed
+        GCF->>Morph: テキスト解析
+        Morph-->>GCF: トークン (読み仮名付き)
+        GCF-->>Ext: JSON { readings: [...] }
+        Ext-->>User: 読み仮名を表示
+    end
