@@ -1,0 +1,102 @@
+openapi: 3.0.3
+info:
+  title: Jifree API
+  description: Chrome拡張機能「Jifree」のためのバックエンドAPI。HTMLテキストを受け取り、形態素分析を行って読み仮名を返す。
+  version: 1.0.0
+servers:
+  - url: https://YOUR_REGION-YOUR_PROJECT.cloudfunctions.net
+    description: Production Server
+  - url: http://localhost:8080
+    description: Local Development
+
+paths:
+  /analyze:
+    post:
+      summary: テキスト解析と読み仮名付与
+      description: |
+        HTML文字列と選択範囲を受け取り、形態素分析を行ってトークン（読み仮名付き）を返す。
+        簡易認証とレート制限（In-Memory）により保護されている。
+      operationId: analyzeText
+      requestBody:
+        description: 解析対象データと認証情報
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - html
+                - selection
+                - auth
+              properties:
+                html:
+                  type: string
+                  description: 解析対象のHTML文字列（親要素を含む）
+                  example: "<p>今日は<strong>良い</strong>天気です</p>"
+                selection:
+                  type: string
+                  description: ユーザーがドラッグして選択したテキスト部分
+                  example: "良い天気"
+                prefix:
+                  type: string
+                  description: 選択範囲の直前のテキスト（文脈特定用）
+                  example: "今日は"
+                suffix:
+                  type: string
+                  description: 選択範囲の直後のテキスト（文脈特定用）
+                  example: "です"
+                auth:
+                  type: object
+                  description: 簡易認証情報
+                  required:
+                    - shared_secret
+                    - user_id
+                  properties:
+                    shared_secret:
+                      type: string
+                      description: 拡張機能共通のシークレットキー (.envで定義)
+                    user_id:
+                      type: string
+                      format: uuid
+                      description: ユーザー識別用のUUID (v4)
+      responses:
+        '200':
+          description: 解析成功
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: "chrome-extension://<ID>"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tokens:
+                    type: array
+                    description: 解析されたトークンのリスト
+                    items:
+                      type: object
+                      properties:
+                        base_form:
+                          type: string
+                          description: 表層形（元の単語）
+                          example: "天気"
+                        reading:
+                          type: string
+                          description: 読み仮名（カタカナ）。読みがない場合や記号の場合は空文字またはそのまま。
+                          example: "テンキ"
+                        part_of_speech:
+                          type: string
+                          description: 品詞（デバッグ・拡張用）
+                          example: "名詞"
+        '400':
+          description: 不正なリクエスト（JSON形式エラー、必須パラメータ欠落）
+        '401':
+          description: 認証エラー（shared_secret 不一致）
+        '403':
+          description: CORSエラー（許可されていないOriginからのアクセス）
+        '429':
+          description: レート制限超過（10秒以内に再リクエスト）
+        '500':
+          description: サーバー内部エラー（形態素分析の失敗など）

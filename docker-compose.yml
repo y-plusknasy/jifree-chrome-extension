@@ -1,14 +1,14 @@
 services:
   backend:
-    image: golang:1.23-alpine
+    image: golang:alpine
     working_dir: /app
     volumes:
       - ./backend:/app
+    # command: tail -f /dev/null
     command: >
-      sh -c "go install github.com/GoogleCloudPlatform/functions-framework-go/funcframework@latest &&
-             go mod tidy &&
-             go run cmd/main.go" 
+      sh -c "go mod tidy && go run cmd/main.go" 
     ports:
       - "8080:8080"
     environment:
       - FUNCTION_TARGET=AnalyzeText # エントリーポイントとなる関数名
+      - SHARED_SECRET=test-secret # テスト用の共通鍵
