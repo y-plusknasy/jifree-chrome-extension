@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Jifree - Kanji Reading Helper",
+  "version": "1.0.0",
+  "description": "Webページ上の選択した漢字に読み仮名を表示します。",
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "activeTab"
+  ],
+  "background": {
+    "service_worker": "dist/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["dist/content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
