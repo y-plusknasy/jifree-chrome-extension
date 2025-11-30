@@ -29,9 +29,9 @@ func (a *Authenticator) ValidateSecret(secret string) bool {
 }
 
 // ValidateOrigin はOriginヘッダーが許可されたものか検証します。
-// 開発環境などでALLOWED_ORIGINが未設定の場合は、チェックをスキップ（許可）します。
+// 開発環境などでALLOWED_ORIGINが未設定、または"*"の場合は、チェックをスキップ（許可）します。
 func (a *Authenticator) ValidateOrigin(origin string) bool {
-	if a.allowedOrigin == "" {
+	if a.allowedOrigin == "" || a.allowedOrigin == "*" {
 		return true
 	}
 	return origin == a.allowedOrigin
