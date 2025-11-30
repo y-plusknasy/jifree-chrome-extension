@@ -13,7 +13,7 @@ import (
 	"github.com/y-plusknasy/jifree-chrome-extension/backend/internal/api"
 	"github.com/y-plusknasy/jifree-chrome-extension/backend/internal/auth"
 	"github.com/y-plusknasy/jifree-chrome-extension/backend/internal/morph"
-	"github.com/y-plusknasy/jifree-chrome-extension/backend/internal/ratelimit"
+	"github.com/y-plusknasy/jifree-chrome-extension/backend/internal/morph/ratelimit"
 )
 
 var (
