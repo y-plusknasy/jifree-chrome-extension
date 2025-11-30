@@ -26,3 +26,15 @@ dev-extension:
 .PHONY: build-extension
 build-extension:
 	docker compose exec extension sh -c "npm install && npm run build"
+
+# 拡張機能のパッケージング（Chromeウェブストア提出用）
+.PHONY: package-extension
+package-extension: build-extension
+	rm -rf extension/package extension/jifree.zip
+	mkdir -p extension/package
+	cp extension/manifest.json extension/package/
+	cp -r extension/images extension/package/
+	cp -r extension/dist extension/package/
+	cd extension/package && zip -r ../jifree.zip .
+	rm -rf extension/package
+	@echo "Package created at extension/jifree.zip"

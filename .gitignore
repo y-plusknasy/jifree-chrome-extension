@@ -15,6 +15,7 @@ node_modules/
 /extension/dist/
 /extension/build/
 .npmrc
+*.ai
 
 # Environment Variables & Secrets
 .env
@@ -27,3 +28,4 @@ docker-compose.override.yml
 .gcloudignore
 .env
 extension/.env.production
+*.zip
