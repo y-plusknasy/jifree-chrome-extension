@@ -18,7 +18,6 @@ node_modules/
 
 # Environment Variables & Secrets
 .env
-.env.*
 *.pem
 
 # Docker
@@ -26,3 +25,5 @@ docker-compose.override.yml
 
 # Google Cloud
 .gcloudignore
+.env
+extension/.env.production

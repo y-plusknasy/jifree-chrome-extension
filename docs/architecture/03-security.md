@@ -44,7 +44,7 @@ POST /analyze
 - **データストア**: In-Memory (Go `sync.Map` or Cache Library)
 - **ロジック**: Simple Expiration
 - **制限ルール**:
-    - **間隔**: 10秒
+    - **間隔**: 5秒
     - **挙動**:
         1. リクエスト受信時、メモリ内のキャッシュに `user_id` が存在するか確認。
         2. **存在する場合 (Cache Hit)**:

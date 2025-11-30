@@ -97,6 +97,6 @@ paths:
         '403':
           description: CORSエラー（許可されていないOriginからのアクセス）
         '429':
-          description: レート制限超過（10秒以内に再リクエスト）
+          description: レート制限超過（5秒以内に再リクエスト）
         '500':
           description: サーバー内部エラー（形態素分析の失敗など）

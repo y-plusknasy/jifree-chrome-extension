@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -24,7 +26,15 @@ func init() {
 	// 各コンポーネントの初期化
 	// Cloud Functionsではinit()で重い処理を行うことで、コールドスタート後の処理を高速化できる
 	authenticator = auth.New()
-	limiter = ratelimit.New(10 * time.Second) // 10秒制限
+
+	// レートリミットの設定を環境変数から読み込む
+	limitSec := 5 // デフォルト5秒
+	if envVal := os.Getenv("RATE_LIMIT_WINDOW_SEC"); envVal != "" {
+		if v, err := strconv.Atoi(envVal); err == nil && v > 0 {
+			limitSec = v
+		}
+	}
+	limiter = ratelimit.New(time.Duration(limitSec) * time.Second)
 
 	var err error
 	analyzer, err = morph.New()

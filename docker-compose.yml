@@ -12,3 +12,10 @@ services:
     environment:
       - FUNCTION_TARGET=AnalyzeText # エントリーポイントとなる関数名
       - SHARED_SECRET=test-secret # テスト用の共通鍵
+
+  extension:
+    image: node:lts-alpine
+    working_dir: /app
+    volumes:
+      - ./extension:/app
+    command: tail -f /dev/null
