@@ -4,8 +4,7 @@
   "version": "1.0.0",
   "description": "Webページ上の選択した漢字に読み仮名を表示します。",
   "permissions": [
-    "storage",
-    "activeTab"
+    "storage"
   ],
   "icons": {
     "16": "images/icon-16.png",
