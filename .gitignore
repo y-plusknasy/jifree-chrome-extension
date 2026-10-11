@@ -16,6 +16,7 @@ node_modules/
 /extension/build/
 .npmrc
 *.ai
+screenshot.png
 
 # Environment Variables & Secrets
 .env
@@ -29,3 +30,16 @@ docker-compose.override.yml
 .env
 extension/.env.production
 *.zip
+
+# Secrets & Logs (added by /gi)
+.env.*
+!.env.example
+!.env.*.example
+!.env.development
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+*.key
+*.log
+logs/
