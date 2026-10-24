@@ -2,6 +2,7 @@
 
 - 調査日: 2026-10-11
 - 結論: **軽量ローカル LLM のサーバー配置は非推奨**。まずは辞書を IPADIC → UniDic に切り替えて効果を測る。LLM を使う場合は「辞書＋商用 LLM API」のハイブリッド構成が精度・コストとも有利。
+- 追記（2026-10-24）: UniDic への切り替えは実測で読みの向上を確認できなかった（[IPADIC と UniDic の比較](./2026-10-24-ipadic-vs-unidic.md)）。辞書の方針は未決定に戻した。
 - 経緯: [セッションメモ](../memo/2026-10-11-session-log.md)
 
 ## 1. 現状の仕組みと誤読の原因
@@ -55,7 +56,9 @@ YOMI-Bench（ANLP 2026 / arXiv 2607.00664）の「読み予測（複数読みを
 - **プライバシーポリシー改定が必要**: 現行は「第三者提供なし」（[privacy-policy.md](../../docs/privacy-policy.md)）。Gemini 無料枠は送信内容がプロダクト改善に利用されるため、子供の閲覧内容を送るなら有料枠が前提。
 - 安価モデル（Haiku / Flash-Lite）自体の読み精度は未測定（上表は上位モデルの値）。
 
-## 4. 追加費用ゼロの改善: IPADIC → UniDic（採用方針）
+## 4. 追加費用ゼロの改善: IPADIC → UniDic（採用方針 → 2026-10-24 の実測を受けて未決定）
+
+> 追記（2026-10-24）: kagome 標準の UniDic（2.1.2）には仮名形の列がなく、読みの組み立て処理が必要だった。例文 44 問では IPADIC と同点で、メモリは約 4 倍。詳細は [IPADIC と UniDic の比較](./2026-10-24-ipadic-vs-unidic.md)。
 
 - UniDic: 国立国語研究所が現在も人手で保守。語彙数は約 75 万（IPADIC 約 40 万）。kagome は `kagome-dict/uni` で対応。
 - 留意点: 分割単位が IPADIC より細かい（短単位）。`findTargetTokens` の選択文字列照合や、フロントのルビ付与単位への影響を確認する必要がある。読みのフィールド位置も IPADIC と異なる。
@@ -66,6 +69,8 @@ YOMI-Bench（ANLP 2026 / arXiv 2607.00664）の「読み予測（複数読みを
 1. 実際に遭遇した誤読例を 20〜50 文集めて評価セット化
 2. IPADIC / UniDic（必要なら＋LLM API）で正解率を比較
 3. 結果を踏まえて切替を実施し、方針を ADR 化
+
+> 追記（2026-10-24）: 1・2 は自作中心の例文 44 問で IPADIC / UniDic について実施（LLM API は未実施）。切替は見送り、方針は未決定。実際の誤読例の収集は未了。
 
 ## 出典
 - [YOMI-Bench (arXiv 2607.00664)](https://arxiv.org/abs/2607.00664) / [HTML 版](https://arxiv.org/html/2607.00664) / [ANLP 2026 Q4-12](https://www.anlp.jp/proceedings/annual_meeting/2026/pdf_dir/Q4-12.pdf)
