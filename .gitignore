@@ -43,3 +43,7 @@ id_ed25519.*
 *.key
 *.log
 logs/
+
+# Private notes (not published)
+/notes/memo/2026-10-25-feature-ideas.md
+/notes/private/
